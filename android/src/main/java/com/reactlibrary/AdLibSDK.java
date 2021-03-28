@@ -41,9 +41,19 @@ public class AdLibSDK extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initializeSDK(final String unitID) {
         Log.i("Mopub SDK", "Initialization...");
-
-        Handler mainHandler = new Handler(getCurrentActivity().getMainLooper());
-
+        
+        
+        Handler mainHandler;
+        // HWJ, wrap this line as workaround for crash issue 
+        // """Attempt to invoke virtual method 'android.os.Looper android.app.Activity.getMainLooper()' on a null object reference com.reactlibrary.AdLibSDK.initializeSDK"""
+        
+        try {
+            mainHandler = new Handler(getCurrentActivity().getMainLooper());
+        } catch(Exception e){
+            e.printStackTrace();
+            return;
+        }
+        
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
