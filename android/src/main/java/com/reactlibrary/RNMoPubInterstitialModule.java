@@ -58,8 +58,11 @@ public class RNMoPubInterstitialModule extends ReactContextBaseJavaModule implem
     @ReactMethod
     public void initializeInterstitialAd(final String adUnitId) {
         Log.i("Mopub SDK", "Initializing interstitial");
-
-        mInterstitial = new MoPubInterstitial(getCurrentActivity(), adUnitId);
+        Activity activity = getCurrentActivity();
+        if (activity == null){ 
+            return;
+        }
+        mInterstitial = new MoPubInterstitial(activity, adUnitId);
         mInterstitial.setInterstitialAdListener(this);
 
         mImpressionListener = new ImpressionListener() {
@@ -110,7 +113,9 @@ public class RNMoPubInterstitialModule extends ReactContextBaseJavaModule implem
     @ReactMethod
     public void loadAd() {
         final Activity activity = getCurrentActivity();
-
+        if (activity == null){
+            return;
+        }
         activity.runOnUiThread(new Runnable() {
             @Override public void run() {
                 if (mInterstitial != null) {
@@ -123,7 +128,11 @@ public class RNMoPubInterstitialModule extends ReactContextBaseJavaModule implem
     @ReactMethod
     public void show() {
         final Activity activity = getCurrentActivity();
-
+//         if (activity == null){
+//             return;
+//         }
+//         crash will be better for this method
+        
         activity.runOnUiThread(new Runnable() {
             @Override public void run() {
                 if (mInterstitial != null) {
